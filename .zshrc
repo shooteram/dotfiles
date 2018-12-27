@@ -43,16 +43,40 @@ composer() {
 }
 
 mariadb() {
-	if [ "$(docker container list --all | grep mariadb_database)" ]; then
-		docker container stop mariadb_database 1> /dev/null
+	CONTAINER_NAME="mariadb_database"
+
+	if [ "$(docker container list --all | grep $CONTAINER_NAME)" ]; then
+		docker container stop $CONTAINER_NAME 1> /dev/null
 		yes | docker container prune 1> /dev/null
 	fi
 
 	docker run -d -p 3306:3306 \
-		-e MYSQL_ROOT_PASSWORD=$LOCAL_DATABASE_PASSWORD \
-		--name mariadb_database mariadb 1> /dev/null
+		-e MYSQL_ROOT_PASSWORD=$DATABASE_PASSWORD \
+		--name $CONTAINER_NAME mariadb 1> /dev/null
 
-	docker ps -a --format "{{.ID}}: {{.Names}}" | grep mariadb_database
+	docker ps -a --format "{{.ID}}: {{.Names}}" | grep $CONTAINER_NAME
+	dip $CONTAINER_NAME
+}
+
+rabbitmq() {
+	CONTAINER_NAME="rabbitmq"
+
+	if [ "$(docker container list --all | grep $CONTAINER_NAME)" ]; then
+		docker container stop $CONTAINER_NAME 1> /dev/null
+		yes | docker container prune 1> /dev/null
+	fi
+
+	docker run -d \
+		-p 15672:15672 \
+		-p 4369:4369 \
+		-p 5671:5671 \
+		-p 25672:25672 \
+		-p 5672:5672 \
+		--hostname local-rabbit \
+		--name $CONTAINER_NAME rabbitmq:3-management 1> /dev/null
+
+	docker ps -a --format "{{.ID}}: {{.Names}}" | grep $CONTAINER_NAME
+	dip $CONTAINER_NAME
 }
 
 phpd() {
