@@ -18,9 +18,12 @@ dkr() {
 		yes | docker container prune 1> /dev/null
 	fi
 
+	kibana_ip_address="172.19.0.30"
+	elasticsearch_ip_address="172.19.0.32"
+
     case $CONTAINER_NAME in
 	kibana)
-		docker run -d -p 5601:5601 --net $NETWORK --ip 172.19.0.30 --hostname $CONTAINER_NAME \
+		docker run -d -p 5601:5601 --net $NETWORK --ip $kibana_ip_address --hostname $CONTAINER_NAME \
 			--name $CONTAINER_NAME kibana:6.6.0 1> /dev/null
 		;;
 	rabbitmq)
@@ -31,7 +34,7 @@ dkr() {
 	elasticsearch)
 		docker run -d -p 9200:9200 -p 9300:9300 \
 			-e "discovery.type=single-node" \
-			--net $NETWORK --ip 172.19.0.32 --hostname $CONTAINER_NAME \
+			--net $NETWORK --ip $elasticsearch_ip_address --hostname $CONTAINER_NAME \
 			--name $CONTAINER_NAME elasticsearch:6.6.0 1> /dev/null
 		;;
 	phpmyadmin)

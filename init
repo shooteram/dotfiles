@@ -1,0 +1,3 @@
+source ~/.dotfiles/.dockerrc
+source ~/.dotfiles/.redmine
+source ~/.dotfiles/.database
