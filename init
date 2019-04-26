@@ -2,3 +2,4 @@ source ~/.dotfiles/.env_vars
 source ~/.dotfiles/.dockerrc
 source ~/.dotfiles/.redmine
 source ~/.dotfiles/.database
+source ~/.dotfiles/._git
