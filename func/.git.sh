@@ -29,3 +29,9 @@ feature_version() { glt feature }
 alias _hot=hotfix_version
 alias _rel=release_version
 alias _fea=feature_version
+
+# define a path for git hooks (if it ain't already defined ofc)
+git config --global core.hooksPath &> /dev/null
+if [[ ! $? -eq 0 ]]; then
+    git config --global core.hooksPath "$__dir/git/hooks"
+fi

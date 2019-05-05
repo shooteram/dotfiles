@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# TODO: check if phpcs and phpbf binaries exists before continuing
+# if they don't exists in $PATH, check in ./vendor
+
+__dir=$(pwd)
+phpcs_file="phpcs.xml"
+
+if [ -f "$__dir/$phpcs_file" ]; then
+    phpcbf "$__dir" &> /dev/null
+
+    phpcs "$__dir"
+    if [[ ! $? -eq 0 ]]; then
+        exit 1
+    fi
+fi
+
+unset __dir phpcs_file
